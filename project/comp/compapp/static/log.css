@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.background {
+    background: url(https://www.sju.edu.in/uploads/event/medium/feminist%20methedology%20event%20cover%20image.png)center/cover no-repeat;
+    border: 2px solid rgba(12, 12, 12, 0.84);
+    width: 100%;
+    height: 100%;
+}
+
+.transbox {
+    margin: 30px;
+    background-color: #ffffff;
+    border: 1px solid black;
+    opacity: 0.8;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.transbox p {
+    margin: 5%;
+    font-weight: 900;
+    color: #000000;
+}

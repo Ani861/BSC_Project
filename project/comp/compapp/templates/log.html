@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'log.css' %}">
+    <title>Login - Schedule Management</title>
+</head>
+
+<body>
+    <div class="background">
+    <div class="transbox">
+    <div class="login-container">
+        <form method="post" action="{% url 'login_view' %}">
+            {% csrf_token %}
+            <h1>WELCOME TO SJU!</h1>
+            <h2>TEACHERS INVIGILATION SYSTEM</h2>
+            <h3>LOGIN</h3>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <br>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+</div>
+</div>
+    <script src="{% static 'login.js' %}"></script>
+</body>
+</html>

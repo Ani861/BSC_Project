@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <title>Assign Teacher Management</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f2f2f2;
+        }
+        
+        .dashboard {
+            display: flex;
+            height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .content-container {
+            background-color: #fff;
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .form-column {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        label {
+            margin-bottom: 10px;
+            display: block;
+            font-weight: bold;
+        }
+        
+        select, input {
+            width: calc(100% - 16px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #555;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <div style="padding: 20px; text-align: center;">
+                <h1 style="margin-bottom: 30px;">Dashboard</h1>
+                <a href="{% url 'index1' %}"><button>Home</button></a>
+                <a href="{% url 'add_teacher' %}"><button>Teacher Management</button></a>
+                <a href="{% url 'add_schedule' %}"><button>Schedule Management</button></a>
+                <a href="{% url 'assign_teacher' %}"><button>Assign Teacher</button></a>
+                <a href="{% url 'report' %}"><button>Report</button></a>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            </div>
+        </div>    
+        <div class="content-container">
+            <div class="form-column">
+                <h2 style="margin-bottom: 20px;">Assign Teacher</h2>
+                {% if messages %}
+                    <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    <label for="date">Date:</label>
+                    <select name="datetime" id="datetime">
+                        {% for schedule in schedules %}
+                            <option value="{{ schedule.date_time|date:'Y-m-d H:i' }}">{{ schedule.date_time|date:'Y-m-d H:i' }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="no_of_students">Number of Students:</label>
+                    <input type="number" min="10" name="no_of_students" id="no_of_students" required>
+                    <label for="block">Block:</label>
+                    <select name="block" id="block">
+                        <option value="NEW BLOCK">NEW BLOCK</option>
+                        <option value="ARRUPE BLOCK">ARRUPE BLOCK</option>
+                        <option value="SCIENCE BLOCK">SCIENCE BLOCK</option>
+                    </select>
+                    <label for="room_number">Room Number:</label>
+                    <select name="room_number" id="room_number">
+                        <!-- Room numbers will be added dynamically based on the selected block -->
+                    </select>
+                    <label for="teacher_1">Teacher (Teacher ID)</label>
+                    <select id="teacher_1" name="teacher_1">
+                        {% for teacher in teachers %}
+                          <option value="{{ teacher.teacher_id }}">{{ teacher.name }} ({{ teacher.teacher_id }})</option>
+                        {% endfor %}
+                      </select>
+                    <div id="teacher2-container" class="hidden">
+                        <label for="teacher_2">Teacher (Teacher ID) (Optional)</label>
+                        <select id="teacher_2" name="teacher_2">
+                            {% for teacher in teachers %}
+                                <option value="{{ teacher.teacher_id }}">{{ teacher.name }} ({{ teacher.teacher_id }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // JavaScript code for dynamically populating room numbers based on the selected block
+        document.getElementById("block").addEventListener("change", function() {
+            var block = this.value;
+            var roomNumberSelect = document.getElementById("room_number");
+            roomNumberSelect.innerHTML = ""; // Clear previous options
+            
+            // Populate room numbers based on the selected block
+            if (block === "NEW BLOCK") {
+                for (var i = 1; i <= 10; i++) {
+                    var option = document.createElement("option");
+                    option.value = "N00" + i;
+                    option.text = "N00" + i;
+                    roomNumberSelect.appendChild(option);
+                }
+            } else if (block === "ARRUPE BLOCK") {
+                for (var i = 1; i <= 10; i++) {
+                    var option = document.createElement("option");
+                    option.value = "A00" + i;
+                    option.text = "A00" + i;
+                    roomNumberSelect.appendChild(option);
+                }
+            } else if (block === "SCIENCE BLOCK") {
+                for (var i = 1; i <= 10; i++) {
+                    var option = document.createElement("option");
+                    option.value = "S00" + i;
+                    option.text = "S00" + i;
+                    roomNumberSelect.appendChild(option);
+                }
+            }
+        });
+    
+        // JavaScript code for toggling the visibility of the second teacher dropdown based on the number of students
+        document.getElementById("no_of_students").addEventListener("change", function() {
+            var numStudents = parseInt(this.value);
+            var teacher2Container = document.getElementById("teacher2-container");
+        
+            if (numStudents > 30) {
+                teacher2Container.classList.remove("hidden");
+                document.getElementById("teacher_2").setAttribute("required", "required");
+            } else {
+                teacher2Container.classList.add("hidden");
+                document.getElementById("teacher_2").removeAttribute("required");
+            }
+        });
+    </script>
+</body>
+</html>

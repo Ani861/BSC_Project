@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/index.css">
+    <title>Assign Teacher Management</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Verdana, Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .dashboard {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .content-container {
+            background-color: white;
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Prevent horizontal scroll */
+        }
+
+        .form-column {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            background-color: #778899;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .table-container {
+            max-height: 400px; /* Set maximum height for scrolling */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+
+        /* Fancy animation for buttons */
+        button {
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-3px);
+        }
+
+        /* Hover effect for table rows */
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <div style="background-size: cover; padding: 20px; text-align: center;">
+                <h1>Dashboard</h1>
+                <a href="{% url 'index1' %}"><button>Home</button></a>
+                <a href="{% url 'add_teacher' %}"><button>Teacher Management</button></a>
+                <a href="{% url 'add_schedule' %}"><button>Schedule Management</button></a>
+                <a href="{% url 'assign_teacher' %}"><button>Assign Teacher</button></a>
+                <a href="{% url 'report' %}"><button>Report</button></a>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            </div>
+        </div>
+        <div class="content-container">
+            <div class="form-column">
+                <h1 style="margin-bottom: 20px;">Assign Teacher Management</h1>
+                <form id="teacher" method="post" action="{% url 'add_teacher' %}">
+                    {% csrf_token %}
+                    <div id="formContainer">
+                        <label for="nameInput">Name:</label>
+                        <input type="text" id="nameInput" name="name" placeholder="Enter teacher's name">
+                        <label for="department">Department:</label>
+                        <input type="text" id="department" name="department" placeholder="Enter department">
+                        <label for="teacher_id">Teacher ID:</label>
+                        <input type="text" id="teacher_id" name="teacher_id" placeholder="Enter teacher ID">
+                        <button type="button" onclick="addData()">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="outputTable">
+            <tr>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Teacher ID</th>
+                <th>Action</th>
+            </tr>
+            {% for teacher in teachers %}
+            <tr>
+                <td>{{ teacher.name }}</td>
+                <td>{{ teacher.department }}</td>
+                <td>{{ teacher.teacher_id }}</td>
+                <td>
+                    <button onclick="editData('{{ teacher.teacher_id }}')">Edit</button>
+                    <button onclick="deleteData(this)">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <script>
+        // JavaScript functions for adding, editing, and deleting teacher data
+        // Add your JavaScript code here
+    </script>
+</body>
+</html>
